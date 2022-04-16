@@ -1,6 +1,6 @@
+import asyncio
 from dotenv import load_dotenv
 import json
-import asyncio
 import nextcord
 from nextcord.ext import commands
 import os
