@@ -7,7 +7,7 @@ import os
 
 load_dotenv()
 
-TOKEN = os.getenv('BOT_TOKEN')
+TOKEN = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix='!')
 
 possible_artifacts = ['small trainer', 'large trainer', 
