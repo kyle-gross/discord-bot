@@ -1,4 +1,3 @@
-from unicodedata import category
 from dotenv import load_dotenv
 import json
 import asyncio
