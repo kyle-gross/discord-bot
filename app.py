@@ -63,8 +63,8 @@ async def countdown_error(ctx, error):
         print(error)
         embed = nextcord.Embed(
             title='Incorrect format',
-            description='Please follow this example:\
-                \n`!countdown "name-of-channel" "amount" "time" "link to village"`',
+            description='Please follow this example:\n' +
+                '`!countdown "name-of-channel" "amount" "time" "link to village"`',
             color=nextcord.Color.green()
         )
         embed.add_field(
