@@ -27,9 +27,14 @@ The purpose of the created channel is to count down the number of troops being c
 
 **Usage:** `!countdown "village-name" "amount" "time" "link"`
 
-> `village-name`: name of village to defend. The created channel will be named `countdown-"village_name"`. If `village-name` contains spaces, The command will not work. Use hyphens to separate words.
+> `village-name`: name of village to defend. The created channel will be named `countdown-"village_name"`.
+>
+>* If `village-name` contains spaces, The command will not work. Use hyphens to separate words.
+>
 > `amount`: integer amount of the required troops. Must be a number.
+>
 > `time`: expiration time of defense call.
+>
 > `link`: link to village to defend
 
 **Example:**
