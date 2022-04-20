@@ -19,7 +19,6 @@ To help automate some leadership tasks.
 |[`!commit`](https://github.com/kyle-gross/discord-bot#commit)|NO|
 |[`!def_role`](https://github.com/kyle-gross/discord-bot#def_role)|YES|
 
-
 ### `!countdown`
 
 Used to create countdowns for defense calls. This command will create the countdown channel within the category "countdown". If the category does not exist, it will be made.
@@ -28,10 +27,10 @@ The purpose of the created channel is to count down the number of troops being c
 
 **Usage:** `!countdown "village-name" "amount" "time" "link"`
 
-> * `village-name`: name of village to defend. The created channel will be named `countdown-"village_name"`. If `village-name` contains spaces, The command will not work. Use hyphens to separate words.
-> * `amount`: integer amount of the required troops. Must be a number.
-> * `time`: expiration time of defense call.
-> * `link`: link to village to defend
+> `village-name`: name of village to defend. The created channel will be named `countdown-"village_name"`. If `village-name` contains spaces, The command will not work. Use hyphens to separate words.
+> `amount`: integer amount of the required troops. Must be a number.
+> `time`: expiration time of defense call.
+> `link`: link to village to defend
 
 **Example:**
 
@@ -51,7 +50,7 @@ This command is intended to take an exact number, therefore do not use abbreviat
 
 **Usage:** `!commit "amount"`
 
-> * `amount`: integer amount of the number of troops being sent.
+> `amount`: integer amount of the number of troops being sent.
 
 **Example:**
 
@@ -65,8 +64,9 @@ Command used to set the defense role for your particular server. This role will 
 
 **Usage:** `!def_role "role name"`
 
-> * `role name`: the role specified here will become the defense role for your server.
->   * To change the defense role, simply run the command again with the correct role.
+> `role name`: the role specified here will become the defense role for your server.
+>
+> * To change the defense role, simply run the command again with the correct role.
 
 **Example:**
 
