@@ -1,12 +1,15 @@
 # Travian Bot
 
-To help automate leadership tasks.
+## Description
 
-## How to use
+To help automate some leadership tasks.
+
+## Usage
 
 * Required roles:
   * `Bot Master`: to create countdowns and artifact rotations.
   * If you wish to create countdowns, please first set the defense role for your server with the `!def_role` command.
+* Commands begin with `!`
 
 ## Commands
 
@@ -16,7 +19,6 @@ To help automate leadership tasks.
 |[`!commit`](https://github.com/kyle-gross/discord-bot#commit)|NO|
 |[`!def_role`](https://github.com/kyle-gross/discord-bot#def_role)|YES|
 
----
 
 ### `!countdown`
 
@@ -24,12 +26,20 @@ Used to create countdowns for defense calls. This command will create the countd
 
 The purpose of the created channel is to count down the number of troops being committed to a defense call until the countdown has reached 0. When the countdown reaches 0, the channel permissions will be adjusted and messages will no longer be able to be sent there. The channel will be automatically removed 24 hours after the countdown expires.
 
-**Example:** `!countdown village-name 100000 00:00:00 <link>`
+**Usage:** `!countdown "village-name" "amount" "time" "link"`
 
-> * `village-name`: name of village to defend. The created channel will be named countdown-`village_name`. If `village-name` contains spaces, The command will not work. Use hyphens to separate words.
+> * `village-name`: name of village to defend. The created channel will be named `countdown-"village_name"`. If `village-name` contains spaces, The command will not work. Use hyphens to separate words.
 > * `amount`: integer amount of the required troops. Must be a number.
 > * `time`: expiration time of defense call.
 > * `link`: link to village to defend
+
+**Example:**
+
+![Countdown_1](./images/countdown_1.png)
+
+And the resulting channel:
+
+![Countdown_2](./images/countdown_2.png)
 
 ---
 
@@ -37,11 +47,15 @@ The purpose of the created channel is to count down the number of troops being c
 
 Command used to commit the exact number of troops sent to countdowns.
 
-`!commit` is intended to take an exact number, therefore do not use abbreviations. ~~`10k`~~ should be `10000`.
+This command is intended to take an exact number, therefore do not use abbreviations. ~~`10k`~~ should be `10000`.
 
-**Example:** `!commit "amount""`
+**Usage:** `!commit "amount"`
 
 > * `amount`: integer amount of the number of troops being sent.
+
+**Example:**
+
+![Commit_1](./images/commit_1.png)
 
 ---
 
@@ -49,10 +63,14 @@ Command used to commit the exact number of troops sent to countdowns.
 
 Command used to set the defense role for your particular server. This role will be @ mentioned when creating countdowns, therefore it is required to set this role before creating countdowns.
 
-**Example:** `!def_role "role name"`
+**Usage:** `!def_role "role name"`
 
 > * `role name`: the role specified here will become the defense role for your server.
 >   * To change the defense role, simply run the command again with the correct role.
+
+**Example:**
+
+![Def_role_1](./images/def_role_1.png)
 
 ---
 
@@ -62,3 +80,7 @@ Artifact rotation manager:
 
 * Oversees artifact rotations for trainer and storage artifacts.
 * Users will be able to request artifacts and be added to wait-lists to use artifacts.
+
+## LICENSE
+
+This project is available under the MIT license. See the LICENSE file for more information.
