@@ -39,11 +39,11 @@ The purpose of the created channel is to count down the number of troops being c
 
 **Example:**
 
-![Countdown_1](./images/countdown_1.png)
+![Countdown_1](./assets/images/countdown_1.png)
 
 And the resulting channel:
 
-![Countdown_2](./images/countdown_2.png)
+![Countdown_2](./assets/images/countdown_2.png)
 
 ---
 
@@ -59,7 +59,7 @@ This command is intended to take an exact number, therefore do not use abbreviat
 
 **Example:**
 
-![Commit_1](./images/commit_1.png)
+![Commit_1](./assets/images/commit_1.png)
 
 ---
 
@@ -75,7 +75,7 @@ Command used to set the defense role for your particular server. This role will 
 
 **Example:**
 
-![Def_role_1](./images/def_role_1.png)
+![Def_role_1](./assets/images/def_role_1.png)
 
 ---
 
