@@ -24,9 +24,7 @@ class Events(commands.Cog, Base):
             'artifacts': {}
         }
         self.save_json(guild_info, f'{self.json_path}{str(ctx.id)}')
-
-        embed = self.msg_on_join()
-        await ctx.owner.send(embed=embed)
+        await ctx.owner.send(embed=self.msg_on_join())
 
     @commands.Cog.listener()
     async def on_guild_remove(self, ctx : commands.Context):
@@ -40,8 +38,8 @@ class Events(commands.Cog, Base):
         ).add_field(
             name='Tips:',
             value='• It is recommended to create a private channel for writing bot commands, so that general channels are not spammed with bot responses.\n' +
-            '• To use some bot commands (such as `!countdown`), the `Bot Master` role is required.\n' +
-            '• Ensure that all users who are allowed to manage the bot are assigned the role `Bot Master`.\n' +
+            '• To use some bot commands (such as `!countdown`), the `Alphas` role is required.\n' +
+            '• Ensure that all users who are allowed to manage the bot are assigned the role `Alphas`.\n' +
             '• Please run the `!def_role` command to set the name of your defender role for your server. ex: `Def`, `Defender`, `Defense`\n',
             inline=False
         ).add_field(

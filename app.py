@@ -6,7 +6,6 @@ import os
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-bot_role = 'Bot Master'
 
 intents = nextcord.Intents.default()
 intents.members = True

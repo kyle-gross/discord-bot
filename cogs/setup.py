@@ -19,9 +19,7 @@ class Setup(commands.Cog, Base):
         guild_info = self.load_json(filepath)
         guild_info['def_role'] = def_role
         self.save_json(guild_info, filepath)
-
-        embed = self.msg_set_role()
-        await ctx.reply(embed=embed)
+        await ctx.reply(embed=self.msg_set_role())
 
     async def msg_set_role(self, def_role : str) -> Embed:
         return Embed(
