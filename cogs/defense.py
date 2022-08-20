@@ -20,7 +20,7 @@ class Defense(commands.Cog, BaseModel):
     ### COMMANDS ###
 
     @commands.has_role(BOT_ROLE)
-    @commands.command(name='countdown', usage='<village name> <troops needed> <time of attack> <link to village>')
+    @commands.command(name='countdown', usage='<village-name> <troops needed> <time of attack> <link to village>')
     async def countdown(
         self,
         ctx : commands.Context,
