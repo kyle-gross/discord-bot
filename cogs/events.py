@@ -1,40 +1,49 @@
-from core.base import Base
+#!/usr/bin/env python3
+from models.guild import Guild
+from models import storage
 import nextcord
 from nextcord.ext import commands
 from nextcord import Embed
 
 
-class Events(commands.Cog, Base):
+class Events(commands.Cog):
 
     def __init__(self, bot : commands.Bot):
-        Base.__init__(self)
+        self.color = nextcord.Color.dark_gold()
         self.bot = bot
 
     ### EVENTS ###
+
     @commands.Cog.listener()
     async def on_ready(self):
         print(f'We have logged in as: {self.bot.user.name}')
 
     @commands.Cog.listener()
     async def on_guild_join(self, ctx : commands.Context):
-        guild_info = {
-            'server_name': ctx.name,
-            'def_role': None,
-            'active_calls': {},
-            'artifacts': {}
-        }
-        self.save_json(guild_info, f'{self.json_path}{str(ctx.id)}')
-        await ctx.owner.send(embed=self.msg_on_join())
+        guild = Guild(
+            id=str(ctx.id),
+            guild_name=ctx.name,
+            def_role=None,
+            admin_role=None
+        )
+        storage.new(guild)
+        storage.save()
+        embed = await self.msg_on_join()
+        await ctx.owner.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_guild_remove(self, ctx : commands.Context):
-        self.delete_json(f'{self.json_path}{str(ctx.id)}')
+        guild = f'Guild.{str(ctx.id)}'
+        guild = storage.all()[guild]
+        storage.delete(guild)
+        storage.save()
 
     ### MESSAGES ###
-    async def msg_on_join(self):
+
+    async def msg_on_join(self) -> Embed:
         return Embed(
             title=f'Thank you for inviting {self.bot.user.name} to your server!',
-            color=self.artifact_color
+            color=self.color
         ).add_field(
             name='Tips:',
             value='• It is recommended to create a private channel for writing bot commands, so that general channels are not spammed with bot responses.\n' +

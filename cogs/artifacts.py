@@ -1,112 +1,114 @@
-from core.base import Base
+#!/usr/bin/env python3
+from models import storage
+from models.artifact import Artifact
+from models.base import BaseModel
 import nextcord
 from nextcord import Embed
 from nextcord.ext import commands
 
 BOT_ROLE = 'Alphas'
 
-class Artifacts(commands.Cog, Base):
+class Artifacts(commands.Cog, BaseModel):
 
     def __init__(self, bot : commands.Bot):
-        Base.__init__(self)
+        BaseModel.__init__(self)
         self.bot = bot
+        self.color = nextcord.Color.dark_gold()
         self.possible_artifacts = [
             'small-trainer', 'large-trainer', 'unique-trainer',
             'small-storage', 'large-storage'
         ]
 
     ### COMMANDS ###
+
+    @commands.command(name='add_artifact', usage='<artifact name> <hours>')
     @commands.has_role(BOT_ROLE)
-    @commands.command(name='add_artifact')
     async def add_artifact(self, ctx : commands.Context, artifact : str, hours : int):
-        """Adds an artifact for a server & creates associated channel"""
+        """Adds an artifact & creates text channel"""
         print(f'{ctx.author} has requested to add an artifact: {artifact} {hours}')
-        guild_id = str(ctx.guild.id)
-        filepath = f'{self.json_path}{guild_id}'
+        guild = f'Guild.{str(ctx.guild.id)}'
+        guild = storage.all()[guild]
 
         if artifact not in self.possible_artifacts:
             raise commands.BadArgument()
         
-        guild_info = self.load_json(filepath)
-        artifacts = guild_info['artifacts']
-        new_info = {
-            'hours': hours,
-            'current_owner': '',
-            'prev_owners': []
-        }
-        if len(artifacts) == 0:
-            new_artifact = artifact + '-1'
-            artifacts[new_artifact] = new_info
-        else:
-            for i in range(len(artifacts) + 1):
-                new_artifact = artifact + '-' + str(i + 1)
-                if new_artifact not in artifacts.keys():
-                    artifacts[new_artifact] = new_info
-                    break
-        self.create_text_channel(ctx, new_artifact, 'artifacts')
+        channel_name = f'{artifact}-'
+        channels = [channel.name for channel in ctx.guild.text_channels]
+        for i in range(len(channels)):
+            channel_name = f'{artifact}-{str(i+1)}'
+            if channel_name not in channels:
+                channel = await self.create_text_channel(ctx, channel_name, 'artifacts')
+                break
 
-        await ctx.reply(embed=self.msg_add_artifact())
-        guild_info['artifacts'] = artifacts
-        self.save_json(guild_info, filepath)
+        artifact = Artifact(
+            id=str(channel.id),
+            name=channel_name,
+            hours=hours,
+            current_owner=None,
+            guild_id=str(ctx.guild.id)
+        )
+        storage.new(artifact)
+        storage.save()
 
-    @commands.command(name='update_artifact')
+        embed = await self.msg_add_artifact(channel, hours)
+        await ctx.reply(embed=embed)
+
+    @commands.command(name='update_artifact', usage='<channel name> <hours>')
+    @commands.has_role(BOT_ROLE)
     async def update_artifact(self, ctx : commands.Context, channel_name : str, hours : int):
-        """Updates the # of hours that an artifact may be held"""
+        """Updates the # of hours for an artifact"""
         print(f'{ctx.author} has requested to update an artifact: {channel_name}\n\tNew hours: {hours}')
-        guild_id = str(ctx.guild.id)
-        filepath = f'{self.json_path}{guild_id}'
         channel = nextcord.utils.get(ctx.guild.channels, name=channel_name)
         if channel is None:
             raise commands.BadArgument
+        artifact = f'Artifact.{str(channel.id)}'
+        artifact = storage.all()[artifact]
+        artifact.hours = hours
+        storage.save()
 
-        guild_info = self.load_json(filepath)
-        artifacts = guild_info['artifacts']
-        artifacts[channel_name]['hours'] = hours
-        guild_info[guild_id]['artifacts'] = artifacts
-        self.save_json(guild_info, filepath)
+        embed = await self.msg_update_artifact(channel_name, hours)
+        await ctx.reply(embed=embed)
 
-        await ctx.reply(embed=self.msg_update_artifact(channel_name, hours))
-
+    @commands.command(name='remove_artifact', usage='<channel name>')
     @commands.has_role(BOT_ROLE)
-    @commands.command(name='remove_artifact')
-    async def remove_artifact(self, ctx : commands.Context, artifact : str):
-        """Removes an artifact from a server & deletes the associated channel"""
-        print(f'{ctx.author} has requested to remove an artifact: {artifact}')
-        guild_id = str(ctx.guild.id)
-        filepath = f'{self.json_path}{guild_id}'
-        guild_info = self.load_json(filepath)
-        artifacts = guild_info['artifacts']
-
-        if artifact not in artifacts.keys():
+    async def remove_artifact(self, ctx : commands.Context, channel_name : str):
+        """Removes an artifact & deletes channel"""
+        print(f'{ctx.author} has requested to remove an artifact: {channel_name}')
+        channel = nextcord.utils.get(ctx.guild.channels, name=channel_name)
+        if channel is None:
             raise commands.BadArgument
-
-        artifacts.pop(artifact)
-        guild_info['artifacts'] = artifacts
-        self.save_json(guild_info, filepath)
-
-        channel = nextcord.utils.get(ctx.guild.channels, name=artifact)
+        artifact = f'Artifact.{str(channel.id)}'
+        artifact = storage.all()[artifact]
+        storage.delete(artifact)
+        storage.save()
+       
         await channel.delete()
-        await ctx.reply(embed=self.msg_rem_artifact(artifact))
+        embed = await self.msg_rem_artifact(channel_name)
+        await ctx.reply(embed=embed)
     
     ### ERRORS ###
+
     @add_artifact.error
     async def add_artifact_error(self, ctx : commands.Context, error):
         print(error)
         if not isinstance(error, commands.MissingRole):
-            await ctx.reply(embed=self.msg_add_artifact_error(ctx))
+            embed = await self.msg_add_artifact_error()
+            await ctx.reply(embed=embed)
 
     @remove_artifact.error
     async def remove_artifact_error(self, ctx : commands.Context, error):
         print(error)
         if not isinstance(error, commands.MissingRole):
-            await ctx.reply(embed=self.msg_rem_err())
+            embed = await self.msg_rem_err()
+            await ctx.reply(embed=embed)
 
     ### MESSAGES ###
+
     async def msg_add_artifact(self, channel, hours : int) -> Embed:
         return Embed(
             title='Artifact channel has been created.',
             description=f'{channel.mention}',
-            color=self.artifact_color
+            color=self.color
         ).add_field(
             name='May be held for:',
             value=f'{hours} hours'
@@ -120,7 +122,7 @@ class Artifacts(commands.Cog, Base):
         return Embed(
             title='Incorrect format',
             description='Please follow this example:\n`!add_artifact "artifact-name" "number of hours"`',
-            color=self.artifact_color
+            color=self.color
         ).add_field(
             name='Notes:',
             value='• `"artifact-name"` must be dash separated.\n' +
@@ -135,14 +137,25 @@ class Artifacts(commands.Cog, Base):
         return Embed(
             title=f'Artifact: {channel_name} has been updated.',
             description=f'New hours: {hours}',
-            color=self.artifact_color
+            color=self.color
         )
     
     async def msg_rem_artifact(self, artifact : str) -> Embed:
         return Embed(
             title='Artifact channel has been deleted.',
             description=f'~~{artifact}~~',
-            color=self.artifact_color
+            color=self.color
+        )
+
+    async def msg_rem_err(self):
+        return Embed(
+            title='Error removing artifact',
+            description='Please follow this example:\n`!remove_artifact "channel-name"`',
+            color=self.color
+        ).add_field(
+            name='Notes:',
+            value='• `"channel-name"` must be the exact name of the channel.\n' +
+                  '• `"channel-name"` should be all lowercase.'
         )
     
 

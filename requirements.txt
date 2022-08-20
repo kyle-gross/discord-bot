@@ -1,3 +1,7 @@
 asyncio==3.4.3
 nextcord==2.0.0a10
 python-dotenv==0.20.0
+SQLAlchemy==1.4.40
+Flask==2.2.2
+psycopg==2-2.9.3
+flask_sqlalchemy==2.5.1
