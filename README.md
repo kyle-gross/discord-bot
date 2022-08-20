@@ -7,17 +7,21 @@ To help automate some leadership tasks.
 ## Usage
 
 * Required roles:
-  * `Bot Master`: to create countdowns and artifact rotations.
+  * `Admin`: to create countdowns and artifact rotations. This role can only be specified by the SERVER OWNER with the `!admin_role` command.
   * If you wish to create countdowns, please first set the defense role for your server with the `!def_role` command.
 * Commands begin with `!`
 
 ## Commands
 
-|Command|Bot Master Role?|
+|Command|Bot Admin Role?|
 |--------|:--------------:|
+|[`!admin_role](https://github.com/kyle-gross/discord-bot#admin_role)|YES|
+|[`!def_role`](https://github.com/kyle-gross/discord-bot#def_role)|YES|
+|[`!add_artifact`](https://github.com/kyle-gross/discord-bot#add_artifact)|YES|
+|[`!update_artifact`](https://github.com/kyle-gross/discord-bot#update_artifact)|YES|
+|[`!remove_artifact`](https://github.com/kyle-gross/discord-bot#remove_artifact)|YES|
 |[`!countdown`](https://github.com/kyle-gross/discord-bot#countdown)|YES|
 |[`!commit`](https://github.com/kyle-gross/discord-bot#commit)|NO|
-|[`!def_role`](https://github.com/kyle-gross/discord-bot#def_role)|YES|
 
 ### `!countdown`
 
